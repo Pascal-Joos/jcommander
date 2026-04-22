@@ -21,3 +21,5 @@ kobaltBuild
 out
 update-doc.sh
 classes
+
+annotator-out
