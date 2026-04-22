@@ -3,6 +3,7 @@ package com.beust.jcommander.converters;
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.internal.Lists;
 import java.util.List;
+import javax.annotation.Nullable;
 
 /**
  * A converter to obtain a list of elements.
@@ -12,7 +13,7 @@ import java.util.List;
  */
 public class DefaultListConverter<T> implements IStringConverter<List<T>> {
 
-  private final IParameterSplitter splitter;
+  @Nullable private final IParameterSplitter splitter;
   private final IStringConverter<T> converter;
 
   /**
@@ -21,7 +22,7 @@ public class DefaultListConverter<T> implements IStringConverter<List<T>> {
    * @param splitter to split value into list of arguments
    * @param converter to convert list of arguments to target element type
    */
-  public DefaultListConverter(IParameterSplitter splitter, IStringConverter<T> converter) {
+  public DefaultListConverter(@Nullable IParameterSplitter splitter, IStringConverter<T> converter) {
     this.splitter = splitter;
     this.converter = converter;
   }

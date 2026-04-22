@@ -16,6 +16,7 @@ package com.beust.jcommander.validators;
 
 import com.beust.jcommander.IValueValidator;
 import com.beust.jcommander.ParameterException;
+import javax.annotation.Nullable;
 
 /**
  * This is the default value of the validateValueWith attribute.
@@ -24,5 +25,5 @@ import com.beust.jcommander.ParameterException;
  */
 public class NoValueValidator<T> implements IValueValidator<T> {
 
-  public void validate(String parameterName, T parameterValue) throws ParameterException {}
+  public void validate(String parameterName, @Nullable T parameterValue) throws ParameterException {}
 }

@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 package com.beust.jcommander;
+import javax.annotation.Nullable;
 
 /**
  * The main exception that JCommand will throw when something goes wrong while parsing parameters.
@@ -33,13 +34,13 @@ public class ParameterException extends RuntimeException {
     super(string, t);
   }
 
-  private JCommander jc;
+  @Nullable private JCommander jc;
 
   public void setJCommander(JCommander jc) {
     this.jc = jc;
   }
 
-  public JCommander getJCommander() {
+  @Nullable public JCommander getJCommander() {
     return jc;
   }
 

@@ -49,6 +49,7 @@ import java.time.OffsetTime;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Map;
+import javax.annotation.Nullable;
 
 public class DefaultConverterFactory implements IStringConverterFactory {
   /** A map of converters per class. */
@@ -88,7 +89,7 @@ public class DefaultConverterFactory implements IStringConverterFactory {
     }
   }
 
-  public Class<? extends IStringConverter<?>> getConverter(Class forType) {
+  @Nullable public Class<? extends IStringConverter<?>> getConverter(Class forType) {
     return classConverters.get(forType);
   }
 }

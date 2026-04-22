@@ -22,13 +22,14 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.ResourceBundle;
+import javax.annotation.Nullable;
 
 public class ParameterDescription {
   private Object object;
 
   private WrappedParameter wrappedParameter;
   private Parameter parameterAnnotation;
-  private DynamicParameter dynamicParameterAnnotation;
+  @Nullable private DynamicParameter dynamicParameterAnnotation;
 
   /** The field/method */
   private Parameterized parameterized;
@@ -36,10 +37,10 @@ public class ParameterDescription {
   /** Keep track of whether a value was added to flag an error */
   private boolean assigned = false;
 
-  private ResourceBundle bundle;
-  private String description;
+  @Nullable private ResourceBundle bundle;
+  @Nullable private String description;
   private JCommander jCommander;
-  private Object defaultObject;
+  @Nullable private Object defaultObject;
 
   /** Longest of the names(), used to present usage() alphabetically */
   private String longestName = "";
@@ -48,7 +49,7 @@ public class ParameterDescription {
       Object object,
       DynamicParameter annotation,
       Parameterized parameterized,
-      ResourceBundle bundle,
+      @Nullable ResourceBundle bundle,
       JCommander jc) {
     if (!Map.class.isAssignableFrom(parameterized.getType())) {
       throw new ParameterException(
@@ -68,7 +69,7 @@ public class ParameterDescription {
       Object object,
       Parameter annotation,
       Parameterized parameterized,
-      ResourceBundle bundle,
+      @Nullable ResourceBundle bundle,
       JCommander jc) {
     parameterAnnotation = annotation;
     wrappedParameter = new WrappedParameter(parameterAnnotation);
@@ -80,7 +81,7 @@ public class ParameterDescription {
    *
    * @return
    */
-  @SuppressWarnings("deprecation")
+  @Nullable @SuppressWarnings("deprecation")
   private ResourceBundle findResourceBundle(Object o) {
     ResourceBundle result = null;
 
@@ -129,7 +130,7 @@ public class ParameterDescription {
    */
   @SuppressWarnings("unchecked")
   private void init(
-      Object object, Parameterized parameterized, ResourceBundle bundle, JCommander jCommander) {
+      Object object, Parameterized parameterized, @Nullable ResourceBundle bundle, JCommander jCommander) {
     this.object = object;
     this.parameterized = parameterized;
     this.bundle = bundle;
@@ -181,14 +182,14 @@ public class ParameterDescription {
     return longestName;
   }
 
-  public Object getDefault() {
+  @Nullable public Object getDefault() {
     return defaultObject;
   }
 
   /**
    * @return defaultValueDescription, if description is empty string, return default Object.
    */
-  public Object getDefaultValueDescription() {
+  @Nullable public Object getDefaultValueDescription() {
     return parameterAnnotation == null
         ? defaultObject
         : parameterAnnotation.defaultValueDescription().isEmpty()
@@ -252,7 +253,7 @@ public class ParameterDescription {
   }
 
   Object addValue(
-      String name, String value, boolean isDefault, boolean validate, int currentIndex) {
+      @Nullable String name, String value, boolean isDefault, boolean validate, int currentIndex) {
     p(
         "Adding "
             + (isDefault ? "default " : "")
@@ -318,9 +319,9 @@ public class ParameterDescription {
     return finalValue;
   }
 
-  private Object value;
+  @Nullable private Object value;
 
-  Object getValue() {
+  @Nullable Object getValue() {
     return value;
   }
 
@@ -389,7 +390,7 @@ public class ParameterDescription {
     }
   }
 
-  void validateValueParameter(String name, Object value) {
+  void validateValueParameter(String name, @Nullable Object value) {
     final Class<? extends IValueValidator> validators[] = wrappedParameter.validateValueWith();
     if (validators != null && validators.length > 0) {
       for (final Class<? extends IValueValidator> validator : validators) {
@@ -399,7 +400,7 @@ public class ParameterDescription {
   }
 
   public void validateValueParameter(
-      Class<? extends IValueValidator> validator, String name, Object value) {
+      Class<? extends IValueValidator> validator, String name, @Nullable Object value) {
     try {
       if (validator != NoValueValidator.class) {
         p("Validating value parameter:" + name + " value:" + value + " validator:" + validator);

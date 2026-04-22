@@ -27,6 +27,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.ResourceBundle;
 import java.util.concurrent.CopyOnWriteArrayList;
+import javax.annotation.Nullable;
 
 /**
  * The main class for JCommander. It's responsible for parsing the object that contains all the
@@ -60,18 +61,18 @@ public class JCommander {
     Parameterized parameterized;
 
     /** The object on which we found the main parameter field. */
-    Object object;
+    @Nullable Object object;
 
     /** The annotation found on the main parameter field. */
-    private Parameter annotation;
+    @Nullable private Parameter annotation;
 
     private ParameterDescription description;
 
     /** Non null if the main parameter is a List<String>. */
-    private List<Object> multipleValue = null;
+    @Nullable private List<Object> multipleValue = null;
 
     /** The value of the single field, if it's not a List<String>. */
-    private Object singleValue = null;
+    @Nullable private Object singleValue = null;
 
     private boolean firstTimeMainParameter = true;
 
@@ -101,7 +102,7 @@ public class JCommander {
   /** The usage formatter to use in {@link #usage()}. */
   private IUsageFormatter usageFormatter = new DefaultUsageFormatter(this);
 
-  private MainParameter mainParameter = null;
+  @Nullable private MainParameter mainParameter = null;
 
   /**
    * A set of all the parameterizeds that are required. During the reflection phase, this field
@@ -124,10 +125,10 @@ public class JCommander {
   private Map<IKey, ProgramName> aliasMap = Maps.newLinkedHashMap();
 
   /** The name of the command after the parsing has run. */
-  private String parsedCommand;
+  @Nullable private String parsedCommand;
 
   /** The name of command or alias as it was passed to the command line */
-  private String parsedAlias;
+  @Nullable private String parsedAlias;
 
   private ProgramName programName;
 
@@ -135,17 +136,17 @@ public class JCommander {
 
   private List<String> unknownArgs = Lists.newArrayList();
 
-  private Console console;
+  @Nullable private Console console;
 
   private final Options options;
 
   /** Options shared with sub commands */
   private static class Options {
 
-    private ResourceBundle bundle;
+    @Nullable private ResourceBundle bundle;
 
     /** A default provider returns default values for the parameters. */
-    private IDefaultProvider defaultProvider;
+    @Nullable private IDefaultProvider defaultProvider;
 
     private Comparator<? super ParameterDescription> parameterDescriptionComparator =
         (Comparator<ParameterDescription>)
@@ -214,7 +215,7 @@ public class JCommander {
    * @param bundle The bundle to use for the descriptions. Can be null.
    * @param args The arguments to parse (optional).
    */
-  public JCommander(Object object, @Nullable ResourceBundle bundle, String... args) {
+  public JCommander(Object object, @Nullable ResourceBundle bundle, @Nullable String... args) {
     this();
     addObject(object);
     if (bundle != null) {
@@ -497,7 +498,7 @@ public class JCommander {
     return false;
   }
 
-  private ParameterDescription getPrefixDescriptionFor(String arg) {
+  @Nullable private ParameterDescription getPrefixDescriptionFor(String arg) {
     for (Map.Entry<IKey, ParameterDescription> es : descriptions.entrySet()) {
       if (Strings.startsWith(arg, es.getKey().getName(), options.caseSensitiveOptions))
         return es.getValue();
@@ -510,7 +511,7 @@ public class JCommander {
    * If arg is an option, we can look it up directly, but if it's a value, we need to find the
    * description for the option that precedes it.
    */
-  private ParameterDescription getDescriptionFor(String arg) {
+  @Nullable private ParameterDescription getDescriptionFor(String arg) {
     return getPrefixDescriptionFor(arg);
   }
 
@@ -1010,7 +1011,7 @@ public class JCommander {
     }
   }
 
-  public String getMainParameterDescription() {
+  @Nullable public String getMainParameterDescription() {
     if (descriptions == null) createDescriptions();
     return mainParameter == null
         ? null
@@ -1023,12 +1024,12 @@ public class JCommander {
   }
 
   /** Get the program name (used only in the usage). */
-  public String getProgramName() {
+  @Nullable public String getProgramName() {
     return programName == null ? null : programName.getName();
   }
 
   /** Get the program display name (used only in the usage). */
-  public String getProgramDisplayName() {
+  @Nullable public String getProgramDisplayName() {
     return programName == null ? null : programName.getDisplayName();
   }
 
@@ -1107,7 +1108,7 @@ public class JCommander {
     return descriptions;
   }
 
-  public IMainParameter getMainParameter() {
+  @Nullable public IMainParameter getMainParameter() {
     return mainParameter;
   }
 
@@ -1117,7 +1118,7 @@ public class JCommander {
 
   public static class Builder {
     private JCommander jCommander = new JCommander();
-    private String[] args = null;
+    @Nullable private String[] args = null;
 
     public Builder() {}
 
@@ -1265,7 +1266,7 @@ public class JCommander {
     return options.columnSize;
   }
 
-  public ResourceBundle getBundle() {
+  @Nullable public ResourceBundle getBundle() {
     return options.bundle;
   }
 
@@ -1280,7 +1281,7 @@ public class JCommander {
   /**
    * @return the main parameter description or null if none is defined.
    */
-  public ParameterDescription getMainParameterValue() {
+  @Nullable public ParameterDescription getMainParameterValue() {
     return mainParameter == null ? null : mainParameter.description;
   }
 
@@ -1328,7 +1329,7 @@ public class JCommander {
     options.converterInstanceFactories.add(0, converterInstanceFactory);
   }
 
-  private IStringConverter<?> findConverterInstance(
+  @Nullable private IStringConverter<?> findConverterInstance(
       Parameter parameter, Class<?> forType, String optionName) {
     for (IStringConverterInstanceFactory f : options.converterInstanceFactories) {
       IStringConverter<?> result = f.getConverterInstance(parameter, forType, optionName);
@@ -1344,7 +1345,7 @@ public class JCommander {
    * @param value The value to convert
    */
   public Object convertValue(
-      final Parameterized parameterized, Class type, String optionName, String value) {
+      final Parameterized parameterized, Class type, @Nullable String optionName, String value) {
     final Parameter annotation = parameterized.getParameter();
 
     // Do nothing if it's a @DynamicParameter
@@ -1389,7 +1390,7 @@ public class JCommander {
     return converter.convert(value);
   }
 
-  private static <T> T tryInstantiateConverter(String optionName, Class<T> converterClass) {
+  @Nullable private static <T> T tryInstantiateConverter(@Nullable String optionName, Class<T> converterClass) {
     if (converterClass == NoConverter.class || converterClass == null) {
       return null;
     }
@@ -1400,7 +1401,7 @@ public class JCommander {
     }
   }
 
-  private static <T> T instantiateConverter(String optionName, Class<? extends T> converterClass)
+  @Nullable private static <T> T instantiateConverter(@Nullable String optionName, Class<? extends T> converterClass)
       throws InstantiationException, IllegalAccessException, InvocationTargetException {
     Constructor<T> ctor = null;
     Constructor<T> stringCtor = null;
@@ -1486,7 +1487,7 @@ public class JCommander {
     return new LinkedHashMap<>(commands);
   }
 
-  public String getParsedCommand() {
+  @Nullable public String getParsedCommand() {
     return parsedCommand;
   }
 
@@ -1496,7 +1497,7 @@ public class JCommander {
    *
    * @return Name of command or alias passed to command line. If none passed: <code>null</code>.
    */
-  public String getParsedAlias() {
+  @Nullable public String getParsedAlias() {
     return parsedAlias;
   }
 
@@ -1514,7 +1515,7 @@ public class JCommander {
     return objects;
   }
 
-  private ParameterDescription findParameterDescription(String arg) {
+  @Nullable private ParameterDescription findParameterDescription(String arg) {
     return FuzzyMap.findInMap(
         descriptions,
         new StringKey(arg),
@@ -1522,12 +1523,12 @@ public class JCommander {
         options.allowAbbreviatedOptions);
   }
 
-  private JCommander findCommand(ProgramName name) {
+  @Nullable private JCommander findCommand(ProgramName name) {
     return FuzzyMap.findInMap(
         commands, name, options.caseSensitiveOptions, options.allowAbbreviatedOptions);
   }
 
-  private ProgramName findProgramName(String name) {
+  @Nullable private ProgramName findProgramName(String name) {
     return FuzzyMap.findInMap(
         aliasMap,
         new StringKey(name),

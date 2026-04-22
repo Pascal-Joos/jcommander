@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 package com.beust.jcommander;
+import javax.annotation.Nullable;
 
 /** A formatter for help messages. */
 public interface IUsageFormatter {
@@ -38,5 +39,5 @@ public interface IUsageFormatter {
   /**
    * @return the description of the argument command
    */
-  String getCommandDescription(String commandName);
+  @Nullable String getCommandDescription(String commandName);
 }

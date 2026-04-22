@@ -6,6 +6,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 
 /** Encapsulate a field or a method annotated with @Parameter or @DynamicParameter */
 public class Parameterized {
@@ -13,13 +14,13 @@ public class Parameterized {
   // Either a method or a field
   private Field field;
   private Method method;
-  private Method getter;
+  @Nullable private Method getter;
 
   // Either of these two
   private WrappedParameter wrappedParameter;
-  private ParametersDelegate parametersDelegate;
+  @Nullable private ParametersDelegate parametersDelegate;
 
-  public Parameterized(WrappedParameter wp, ParametersDelegate pd, Field field, Method method) {
+  public Parameterized(@Nullable WrappedParameter wp, @Nullable ParametersDelegate pd, @Nullable Field field, @Nullable Method method) {
     wrappedParameter = wp;
     this.method = method;
     this.field = field;
@@ -150,7 +151,7 @@ public class Parameterized {
     return result;
   }
 
-  private static Parameterized createParameterizedFromMethod(Method m) {
+  @Nullable private static Parameterized createParameterizedFromMethod(Method m) {
     m.setAccessible(true);
     Annotation annotation = m.getAnnotation(Parameter.class);
     Annotation delegateAnnotation = m.getAnnotation(ParametersDelegate.class);
@@ -187,7 +188,7 @@ public class Parameterized {
     }
   }
 
-  public Object get(Object object) {
+  @Nullable public Object get(@Nullable Object object) {
     try {
       if (method != null) {
         if (getter == null) {
@@ -288,7 +289,7 @@ public class Parameterized {
     return "Could not invoke " + m + "\n    Reason: " + ex.getMessage();
   }
 
-  public void set(Object object, Object value) {
+  public void set(@Nullable Object object, Object value) {
     try {
       if (method != null) {
         method.invoke(object, value);
@@ -307,7 +308,7 @@ public class Parameterized {
     }
   }
 
-  public ParametersDelegate getDelegateAnnotation() {
+  @Nullable public ParametersDelegate getDelegateAnnotation() {
     return parametersDelegate;
   }
 
@@ -319,14 +320,14 @@ public class Parameterized {
     }
   }
 
-  public Parameter getParameter() {
+  @Nullable public Parameter getParameter() {
     return wrappedParameter.getParameter();
   }
 
   /**
    * @return the generic type of the collection for this field, or null if not applicable.
    */
-  public Type findFieldGenericType() {
+  @Nullable public Type findFieldGenericType() {
     if (method != null) {
       return null;
     } else {
