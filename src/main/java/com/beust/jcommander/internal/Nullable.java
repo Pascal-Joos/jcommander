@@ -8,5 +8,4 @@ import java.lang.annotation.Target;
 
 @Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
 @Target({FIELD, PARAMETER})
-public @interface Nullable {
-}
+public @interface Nullable {}

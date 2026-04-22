@@ -31,9 +31,7 @@ public class JsonAnnotationParameterizedParser implements IParameterizedParser {
 
   public static final String PREFIX_MARKER = "prefix:";
 
-  /**
-   * This is the standard prefix like "--" or "-"
-   */
+  /** This is the standard prefix like "--" or "-" */
   protected final String paramPrefix;
 
   /**
@@ -131,35 +129,36 @@ public class JsonAnnotationParameterizedParser implements IParameterizedParser {
       // check fields
       for (Field field : curClazz.getDeclaredFields()) {
         JsonProperty fieldAnnotation = (JsonProperty) field.getAnnotation(JsonProperty.class);
-        JsonPropertyDescription descrAnnotation = (JsonPropertyDescription) field.getAnnotation(JsonPropertyDescription.class);
+        JsonPropertyDescription descrAnnotation =
+            (JsonPropertyDescription) field.getAnnotation(JsonPropertyDescription.class);
         MyDelegate myDelegate = (MyDelegate) field.getAnnotation(MyDelegate.class);
-        if (fieldAnnotation != null) {         
-          // this is a map of annotation field names uses to create the Parameter annotation 
+        if (fieldAnnotation != null) {
+          // this is a map of annotation field names uses to create the Parameter annotation
           // at runtime
           Map<String, Object> map = new HashMap<>();
 
           /*
-          * For primitive and their derived types, we can use the Parameter annotation, but for
-          * other user classes, we need to add a delegate
+           * For primitive and their derived types, we can use the Parameter annotation, but for
+           * other user classes, we need to add a delegate
            */
           if (isPrimitiveOrString(field) || myDelegate == null) {
             /*
-            * create standard Parameter
+             * create standard Parameter
              */
             String name = fieldAnnotation.value();
-            map.put("names", new String[]{name});
+            map.put("names", new String[] {name});
             map.put("required", fieldAnnotation.required());
             map.put("descriptionKey", "");
             // all variable types, even Boolean require 1 following parameter.
-            //if (field.getType() == Boolean.class || field.getType() == boolean.class) {
+            // if (field.getType() == Boolean.class || field.getType() == boolean.class) {
             map.put("arity", 1);
             map.put("variableArity", (field.getType() == List.class));
             map.put("password", false);
             map.put("converter", NoConverter.class);
             map.put("listConverter", NoConverter.class);
             map.put("hidden", false);
-            map.put("validateWith", new Class[]{NoValidator.class});
-            map.put("validateValueWith", new Class[]{NoValueValidator.class});
+            map.put("validateWith", new Class[] {NoValidator.class});
+            map.put("validateValueWith", new Class[] {NoValueValidator.class});
             map.put("splitter", CommaParameterSplitter.class);
             map.put("echoInput", true);
             map.put("help", false);
@@ -171,70 +170,75 @@ public class JsonAnnotationParameterizedParser implements IParameterizedParser {
             result.add(new Parameterized(new WrappedParameter(param), null, field, null));
           } else {
             /*
-            * Create ParametersDelegate
+             * Create ParametersDelegate
              */
-            ParametersDelegate param = (ParametersDelegate) AnnotationParser.annotationForMap(ParametersDelegate.class, map);
+            ParametersDelegate param =
+                (ParametersDelegate)
+                    AnnotationParser.annotationForMap(ParametersDelegate.class, map);
             result.add(new Parameterized(null, param, field, null));
           }
         }
       }
 
       /*
-      * This section would be for completeness and although it is not tested it is left here
-      * as a template to use the JsonSetter (or JsonGetter) methods as ways to define parameters
-      * at runtime.
-      */
-//      // check methods
-//      for (Method method : curClazz.getDeclaredMethods()) {
-//        // these only work on setMethods
-//        if (!method.getName().startsWith("set")) {
-//          continue;
-//        }
-//
-//        JsonSetter jsonSetterAnnotation = (JsonSetter) method.getAnnotation(JsonSetter.class);
-//        if (jsonSetterAnnotation != null) {
-//          Map<String, Object> map = new HashMap<String, Object>();
-//
-//          /*
-//          * For primitive and their derived types, we can use the Parameter annotation, but for
-//          * other user classes, we need to add a delegate
-//           */
-// /*
-//            * create standard Parameter
-//           */
-//          String name = jsonSetterAnnotation.value();
-//          map.put("names", new String[]{name});
-//          map.put("required", false);
-//          //
-//          // TODO SET THE DEFAULT VALUE BASED ON THE values() OR valuesEnum()
-//          // map.put("default", annotation.defaultValue());
-//          //
-//          map.put("descriptionKey", "");
-//          // get the parameter type
-//          Class[] paramTypes = method.getParameterTypes();
-//          // there should only be one for a 
-//          // all variable types, even Boolean require 1 following parameter.
-//          //if (paramTypes[0] == Boolean.class || paramTypes[0] == boolean.class) {
-//          map.put("arity", 1);
-//          //} 
-//          map.put("variableArity", (paramTypes[0] == List.class));
-//          map.put("password", false);
-//          map.put("converter", NoConverter.class);
-//          map.put("listConverter", NoConverter.class);
-//          map.put("hidden", false);
-//          map.put("validateWith", new Class[]{NoValidator.class});
-//          map.put("validateValueWith", new Class[]{NoValueValidator.class});
-//          map.put("splitter", CommaParameterSplitter.class);
-//          map.put("echoInput", true);
-//          map.put("help", false);
-//          map.put("forceNonOverwritable", false);
-//          map.put("order", -1);
-//          map.put("description", "");
-//
-//          Parameter param = (Parameter) AnnotationParser.annotationForMap(Parameter.class, map);
-//          result.add(new Parameterized(new WrappedParameter(param), null, null, method));
-//        }
-//      }
+       * This section would be for completeness and although it is not tested it is left here
+       * as a template to use the JsonSetter (or JsonGetter) methods as ways to define parameters
+       * at runtime.
+       */
+      //      // check methods
+      //      for (Method method : curClazz.getDeclaredMethods()) {
+      //        // these only work on setMethods
+      //        if (!method.getName().startsWith("set")) {
+      //          continue;
+      //        }
+      //
+      //        JsonSetter jsonSetterAnnotation = (JsonSetter)
+      // method.getAnnotation(JsonSetter.class);
+      //        if (jsonSetterAnnotation != null) {
+      //          Map<String, Object> map = new HashMap<String, Object>();
+      //
+      //          /*
+      //          * For primitive and their derived types, we can use the Parameter annotation, but
+      // for
+      //          * other user classes, we need to add a delegate
+      //           */
+      // /*
+      //            * create standard Parameter
+      //           */
+      //          String name = jsonSetterAnnotation.value();
+      //          map.put("names", new String[]{name});
+      //          map.put("required", false);
+      //          //
+      //          // TODO SET THE DEFAULT VALUE BASED ON THE values() OR valuesEnum()
+      //          // map.put("default", annotation.defaultValue());
+      //          //
+      //          map.put("descriptionKey", "");
+      //          // get the parameter type
+      //          Class[] paramTypes = method.getParameterTypes();
+      //          // there should only be one for a
+      //          // all variable types, even Boolean require 1 following parameter.
+      //          //if (paramTypes[0] == Boolean.class || paramTypes[0] == boolean.class) {
+      //          map.put("arity", 1);
+      //          //}
+      //          map.put("variableArity", (paramTypes[0] == List.class));
+      //          map.put("password", false);
+      //          map.put("converter", NoConverter.class);
+      //          map.put("listConverter", NoConverter.class);
+      //          map.put("hidden", false);
+      //          map.put("validateWith", new Class[]{NoValidator.class});
+      //          map.put("validateValueWith", new Class[]{NoValueValidator.class});
+      //          map.put("splitter", CommaParameterSplitter.class);
+      //          map.put("echoInput", true);
+      //          map.put("help", false);
+      //          map.put("forceNonOverwritable", false);
+      //          map.put("order", -1);
+      //          map.put("description", "");
+      //
+      //          Parameter param = (Parameter) AnnotationParser.annotationForMap(Parameter.class,
+      // map);
+      //          result.add(new Parameterized(new WrappedParameter(param), null, null, method));
+      //        }
+      //      }
     }
 
     return result;
@@ -242,7 +246,7 @@ public class JsonAnnotationParameterizedParser implements IParameterizedParser {
 
   /**
    * Basic check for primitive or Java class that should be used directly.
-   * 
+   *
    * @param field non-null java Field
    * @return true if Java primitive or part of the Java or Sun package.
    */
@@ -252,5 +256,4 @@ public class JsonAnnotationParameterizedParser implements IParameterizedParser {
 
     return type.isPrimitive() || name.startsWith("java") || name.startsWith("sun");
   }
-
 }

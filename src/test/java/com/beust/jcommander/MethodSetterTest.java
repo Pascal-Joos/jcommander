@@ -1,13 +1,10 @@
 package com.beust.jcommander;
 
+import java.util.List;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.List;
-
-/**
- * Tests for @Parameter on top of methods.
- */
+/** Tests for @Parameter on top of methods. */
 @Test
 public class MethodSetterTest {
   public void arityStringsSetter() {
@@ -17,19 +14,22 @@ public class MethodSetterTest {
       public void setPairs(List<String> pairs) {
         this.pairs = pairs;
       }
+
       public List<String> getPairs() {
         return this.pairs;
       }
+
       public List<String> pairs;
 
       @Parameter(description = "Rest")
       public void setRest(List<String> rest) {
         this.rest = rest;
       }
+
       public List<String> rest;
     }
     ArgsArityStringSetter args = new ArgsArityStringSetter();
-    String[] argv = { "-pairs", "pair0", "pair1", "rest" };
+    String[] argv = {"-pairs", "pair0", "pair1", "rest"};
     JCommander.newBuilder().addObject(args).build().parse(argv);
 
     Assert.assertEquals(args.pairs.size(), 2);
@@ -49,7 +49,7 @@ public class MethodSetterTest {
     boolean passed = false;
     try {
       JCommander.newBuilder().addObject(new Arg()).build().parse("--host", "host");
-    } catch(ParameterException ex) {
+    } catch (ParameterException ex) {
       Assert.assertEquals(ex.getCause(), null);
       passed = true;
     }

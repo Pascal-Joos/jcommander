@@ -36,9 +36,7 @@ public class DynamicParameterTest {
 
   public void usage() {
     DSimple ds = new DSimple();
-    JCommander jc = JCommander.newBuilder()
-            .addObject(ds)
-            .build();
+    JCommander jc = JCommander.newBuilder().addObject(ds).build();
     jc.getUsageFormatter().usage(new StringBuilder());
   }
 

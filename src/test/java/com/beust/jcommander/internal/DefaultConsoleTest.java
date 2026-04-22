@@ -2,7 +2,6 @@ package com.beust.jcommander.internal;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

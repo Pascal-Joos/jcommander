@@ -4,9 +4,7 @@ import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
-/**
- * Converter to {@link Instant}.
- */
+/** Converter to {@link Instant}. */
 public final class InstantConverter extends JavaTimeConverter<Instant> {
 
   public InstantConverter(String optionName) {

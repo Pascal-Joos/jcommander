@@ -4,9 +4,7 @@ import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
-/**
- * Converter for {@link OffsetTime}.
- */
+/** Converter for {@link OffsetTime}. */
 public class OffsetTimeConverter extends JavaTimeConverter<OffsetTime> {
 
   public OffsetTimeConverter(String optionName) {

@@ -4,9 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-/**
- * Encapsulates the operations common to @Parameter and @DynamicParameter
- */
+/** Encapsulates the operations common to @Parameter and @DynamicParameter */
 public class WrappedParameter {
   private Parameter parameter;
   private DynamicParameter dynamicParameter;
@@ -68,9 +66,7 @@ public class WrappedParameter {
   }
 
   public Class<? extends IValueValidator>[] validateValueWith() {
-    return parameter != null
-        ? parameter.validateValueWith()
-        : dynamicParameter.validateValueWith();
+    return parameter != null ? parameter.validateValueWith() : dynamicParameter.validateValueWith();
   }
 
   public boolean echoInput() {
@@ -86,7 +82,7 @@ public class WrappedParameter {
   }
 
   public void addValue(Parameterized parameterized, Object object, Object value, Field field)
-          throws IllegalAccessException {
+      throws IllegalAccessException {
     if (parameter != null) {
       if (field != null) {
         field.set(object, value);
@@ -100,8 +96,7 @@ public class WrappedParameter {
       int aInd = sv.indexOf(a);
       if (aInd == -1) {
         throw new ParameterException(
-            "Dynamic parameter expected a value of the form a" + a + "b"
-                + " but got:" + sv);
+            "Dynamic parameter expected a value of the form a" + a + "b" + " but got:" + sv);
       }
       callPut(object, parameterized, sv.substring(0, aInd), sv.substring(aInd + 1));
     }
@@ -112,7 +107,10 @@ public class WrappedParameter {
       Method m;
       m = findPut(parameterized.getType());
       m.invoke(parameterized.get(object), key, value);
-    } catch (SecurityException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+    } catch (SecurityException
+        | IllegalAccessException
+        | NoSuchMethodException
+        | InvocationTargetException e) {
       e.printStackTrace();
     }
   }
@@ -130,6 +128,6 @@ public class WrappedParameter {
   }
 
   public boolean isNonOverwritableForced() {
-      return parameter != null && parameter.forceNonOverwritable();
+    return parameter != null && parameter.forceNonOverwritable();
   }
 }

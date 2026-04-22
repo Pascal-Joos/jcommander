@@ -1,7 +1,6 @@
 package com.beust.jcommander.internal;
 
 import com.beust.jcommander.ParameterException;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -33,10 +32,8 @@ public class DefaultConsole implements Console {
       BufferedReader in = new BufferedReader(isr);
       String result = in.readLine();
       return result.toCharArray();
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       throw new ParameterException(e);
     }
   }
-
 }

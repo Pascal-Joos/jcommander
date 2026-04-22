@@ -22,11 +22,12 @@ import com.beust.jcommander.internal.Lists;
 import java.util.List;
 
 /**
- *
  * @author Andy Law <andy.law@roslin.ed.ac.uk>
  */
 public class AlternateNamesForListArgs {
 
-    @Parameter(names = {"-s", "--servers"}, description = "blah")
-    public List<String> serverNames = Lists.newLinkedList();
+  @Parameter(
+      names = {"-s", "--servers"},
+      description = "blah")
+  public List<String> serverNames = Lists.newLinkedList();
 }

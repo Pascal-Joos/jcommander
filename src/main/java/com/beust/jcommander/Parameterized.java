@@ -2,15 +2,12 @@ package com.beust.jcommander;
 
 import com.beust.jcommander.internal.Lists;
 import com.beust.jcommander.internal.Sets;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * Encapsulate a field or a method annotated with @Parameter or @DynamicParameter
- */
+/** Encapsulate a field or a method annotated with @Parameter or @DynamicParameter */
 public class Parameterized {
 
   // Either a method or a field
@@ -22,13 +19,12 @@ public class Parameterized {
   private WrappedParameter wrappedParameter;
   private ParametersDelegate parametersDelegate;
 
-  public Parameterized(WrappedParameter wp, ParametersDelegate pd,
-      Field field, Method method) {
+  public Parameterized(WrappedParameter wp, ParametersDelegate pd, Field field, Method method) {
     wrappedParameter = wp;
     this.method = method;
     this.field = field;
     if (this.field != null) {
-      if(pd == null) {
+      if (pd == null) {
         setFieldAccessible(this.field);
       } else {
         setFieldAccessibleWithoutFinalCheck(this.field);
@@ -38,20 +34,20 @@ public class Parameterized {
   }
 
   /**
-   * Recursive handler for describing the set of classes while
-   * using the setOfClasses parameter as a collector
+   * Recursive handler for describing the set of classes while using the setOfClasses parameter as a
+   * collector
    *
    * @param inputClass the class to analyze
    * @param setOfClasses the set collector to collect the results
-     */
+   */
   private static void describeClassTree(Class<?> inputClass, Set<Class<?>> setOfClasses) {
     // can't map null class
-    if(inputClass == null) {
+    if (inputClass == null) {
       return;
     }
 
     // don't further analyze a class that has been analyzed already
-    if(Object.class.equals(inputClass) || setOfClasses.contains(inputClass)) {
+    if (Object.class.equals(inputClass) || setOfClasses.contains(inputClass)) {
       return;
     }
 
@@ -62,20 +58,19 @@ public class Parameterized {
     describeClassTree(inputClass.getSuperclass(), setOfClasses);
 
     // perform analysis on interfaces
-    for(Class<?> hasInterface : inputClass.getInterfaces()) {
+    for (Class<?> hasInterface : inputClass.getInterfaces()) {
       describeClassTree(hasInterface, setOfClasses);
     }
   }
 
   /**
-   * Given an object return the set of classes that it extends
-   * or implements.
+   * Given an object return the set of classes that it extends or implements.
    *
    * @param inputClass object to describe
    * @return set of classes that are implemented or extended by that object
    */
   private static Set<Class<?>> describeClassTree(Class<?> inputClass) {
-    if(inputClass == null) {
+    if (inputClass == null) {
       return Collections.emptySet();
     }
 
@@ -101,7 +96,7 @@ public class Parameterized {
     Map<String, Parameterized> methods = new HashMap<>();
 
     // analyze each type
-    for(Class<?> cls : types) {
+    for (Class<?> cls : types) {
 
       // check fields
       for (Field f : cls.getDeclaredFields()) {
@@ -109,14 +104,14 @@ public class Parameterized {
         Annotation delegateAnnotation = f.getAnnotation(ParametersDelegate.class);
         Annotation dynamicParameter = f.getAnnotation(DynamicParameter.class);
         if (annotation != null) {
-          result.add(new Parameterized(new WrappedParameter((Parameter) annotation), null,
-                  f, null));
+          result.add(
+              new Parameterized(new WrappedParameter((Parameter) annotation), null, f, null));
         } else if (dynamicParameter != null) {
-          result.add(new Parameterized(new WrappedParameter((DynamicParameter) dynamicParameter), null,
-                  f, null));
+          result.add(
+              new Parameterized(
+                  new WrappedParameter((DynamicParameter) dynamicParameter), null, f, null));
         } else if (delegateAnnotation != null) {
-          result.add(new Parameterized(null, (ParametersDelegate) delegateAnnotation,
-                  f, null));
+          result.add(new Parameterized(null, (ParametersDelegate) delegateAnnotation, f, null));
         }
       }
 
@@ -134,17 +129,21 @@ public class Parameterized {
       }
 
       // Accumulate the bridge and synthetic methods to check later
-      bridgeOrSyntheticMethods.addAll(Arrays.stream(cls.getDeclaredMethods())
-        .filter(method -> method.isBridge() || method.isSynthetic())
-        .collect(Collectors.toList()));
+      bridgeOrSyntheticMethods.addAll(
+          Arrays.stream(cls.getDeclaredMethods())
+              .filter(method -> method.isBridge() || method.isSynthetic())
+              .collect(Collectors.toList()));
     }
 
-    // If there are any bridge or synthetic methods that do not have a name which is already present, add them to the
-    // methods map. Otherwise, the non-bridge or non-synthetic method of the same name will take precedence
+    // If there are any bridge or synthetic methods that do not have a name which is already
+    // present, add them to the
+    // methods map. Otherwise, the non-bridge or non-synthetic method of the same name will take
+    // precedence
     bridgeOrSyntheticMethods.stream()
-      .map(Parameterized::createParameterizedFromMethod)
-      .filter(Objects::nonNull)
-      .forEach(parameterized -> methods.putIfAbsent(parameterized.method.getName(), parameterized));
+        .map(Parameterized::createParameterizedFromMethod)
+        .filter(Objects::nonNull)
+        .forEach(
+            parameterized -> methods.putIfAbsent(parameterized.method.getName(), parameterized));
 
     result.addAll(methods.values());
 
@@ -157,14 +156,12 @@ public class Parameterized {
     Annotation delegateAnnotation = m.getAnnotation(ParametersDelegate.class);
     Annotation dynamicParameter = m.getAnnotation(DynamicParameter.class);
     if (annotation != null) {
-      return new Parameterized(new WrappedParameter((Parameter) annotation), null,
-              null, m);
+      return new Parameterized(new WrappedParameter((Parameter) annotation), null, null, m);
     } else if (dynamicParameter != null) {
-      return new Parameterized(new WrappedParameter((DynamicParameter) dynamicParameter), null,
-              null, m);
+      return new Parameterized(
+          new WrappedParameter((DynamicParameter) dynamicParameter), null, null, m);
     } else if (delegateAnnotation != null) {
-      return new Parameterized(null, (ParametersDelegate) delegateAnnotation,
-              null, m);
+      return new Parameterized(null, (ParametersDelegate) delegateAnnotation, null, m);
     }
 
     return null;
@@ -200,7 +197,10 @@ public class Parameterized {
       } else {
         return field.get(object);
       }
-    } catch (SecurityException | IllegalArgumentException | InvocationTargetException | IllegalAccessException e) {
+    } catch (SecurityException
+        | IllegalArgumentException
+        | InvocationTargetException
+        | IllegalAccessException e) {
       throw new ParameterException(e);
     } catch (NoSuchMethodException e) {
       // Try to find a field
@@ -213,27 +213,26 @@ public class Parameterized {
           setFieldAccessible(field);
           result = field.get(object);
         }
-      } catch(NoSuchFieldException | IllegalAccessException ex) {
+      } catch (NoSuchFieldException | IllegalAccessException ex) {
         // ignore
       }
       return result;
     }
   }
 
-  private void setGetter(Object object) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-    if(Boolean.class.getSimpleName().toLowerCase().equals(getType().getName())){
+  private void setGetter(Object object)
+      throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    if (Boolean.class.getSimpleName().toLowerCase().equals(getType().getName())) {
       // try is<fieldname> notation
       try {
-        getter = object.getClass()
-                .getMethod("is" + method.getName().substring(3));
+        getter = object.getClass().getMethod("is" + method.getName().substring(3));
         // we have found a is<fieldname> getter we can return
         return;
-      } catch (NoSuchMethodException n){
+      } catch (NoSuchMethodException n) {
         // if not found ignore exception and try with default get<fieldname> below
       }
     }
-    getter = object.getClass()
-            .getMethod("g" + method.getName().substring(1));
+    getter = object.getClass().getMethod("g" + method.getName().substring(1));
   }
 
   @Override
@@ -247,23 +246,16 @@ public class Parameterized {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     Parameterized other = (Parameterized) obj;
     if (field == null) {
-      if (other.field != null)
-        return false;
-    } else if (!field.equals(other.field))
-      return false;
+      if (other.field != null) return false;
+    } else if (!field.equals(other.field)) return false;
     if (method == null) {
-      if (other.method != null)
-        return false;
-    } else if (!method.equals(other.method))
-      return false;
+      if (other.method != null) return false;
+    } else if (!method.equals(other.method)) return false;
     return true;
   }
 
@@ -278,8 +270,12 @@ public class Parameterized {
   private static void setFieldAccessible(Field f) {
     if (Modifier.isFinal(f.getModifiers())) {
       throw new ParameterException(
-        "Cannot use final field " + f.getDeclaringClass().getName() + "#" + f.getName() + " as a parameter;"
-        + " compile-time constant inlining may hide new values written to it.");
+          "Cannot use final field "
+              + f.getDeclaringClass().getName()
+              + "#"
+              + f.getName()
+              + " as a parameter;"
+              + " compile-time constant inlining may hide new values written to it.");
     }
     f.setAccessible(true);
   }
@@ -297,7 +293,7 @@ public class Parameterized {
       if (method != null) {
         method.invoke(object, value);
       } else {
-          field.set(object, value);
+        field.set(object, value);
       }
     } catch (IllegalAccessException | IllegalArgumentException ex) {
       throw new ParameterException(errorMessage(method, ex));
@@ -355,5 +351,4 @@ public class Parameterized {
   public boolean isDynamicParameter() {
     return wrappedParameter.getDynamicParameter() != null;
   }
-
 }

@@ -1,42 +1,35 @@
 /**
- * Copyright (C) 2010 the original author or authors.
- * See the notice.md file distributed with this work for additional
- * information regarding copyright ownership.
+ * Copyright (C) 2010 the original author or authors. See the notice.md file distributed with this
+ * work for additional information regarding copyright ownership.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * <p>http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
+ * <p>Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.beust.jcommander;
 
 import com.beust.jcommander.args.ArgsDefault;
 import com.beust.jcommander.defaultprovider.PropertyFileDefaultProvider;
-
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Set;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Set;
-
 public class DefaultProviderTest {
-  private static final IDefaultProvider DEFAULT_PROVIDER = new IDefaultProvider() {
+  private static final IDefaultProvider DEFAULT_PROVIDER =
+      new IDefaultProvider() {
 
-    public String getDefaultValueFor(String optionName) {
-      return "-debug".equals(optionName) ? "false" : "42";
-    }
-    
-  };
+        public String getDefaultValueFor(String optionName) {
+          return "-debug".equals(optionName) ? "false" : "42";
+        }
+      };
 
   private ArgsDefault defaultProvider(IDefaultProvider provider, String... args) {
     ArgsDefault a = new ArgsDefault();
@@ -76,8 +69,8 @@ public class DefaultProviderTest {
 
   @Test
   public void defaultProvider4() {
-    ArgsDefault a = defaultProvider(DEFAULT_PROVIDER,
-        "-log", "19", "-groups", "foo", "-level", "13", "f");
+    ArgsDefault a =
+        defaultProvider(DEFAULT_PROVIDER, "-log", "19", "-groups", "foo", "-level", "13", "f");
 
     Assert.assertEquals(a.groups, "foo");
     Assert.assertEquals(a.level, 13);
@@ -96,7 +89,7 @@ public class DefaultProviderTest {
   @Test
   public void propertyFileDefaultProvider2() {
     ArgsDefault a = defaultProvider(new PropertyFileDefaultProvider(), "-groups", "foo", "f");
-    
+
     Assert.assertEquals(a.groups, "foo");
     Assert.assertEquals(a.level, 17);
     Assert.assertEquals(a.log.intValue(), 18);
@@ -104,8 +97,8 @@ public class DefaultProviderTest {
 
   @Test
   public void propertyFileDefaultProvider3() {
-    ArgsDefault a = defaultProvider(new PropertyFileDefaultProvider(),
-        "-groups", "foo", "-level", "13", "f");
+    ArgsDefault a =
+        defaultProvider(new PropertyFileDefaultProvider(), "-groups", "foo", "-level", "13", "f");
 
     Assert.assertEquals(a.groups, "foo");
     Assert.assertEquals(a.level, 13);
@@ -114,8 +107,9 @@ public class DefaultProviderTest {
 
   @Test
   public void propertyFileDefaultProvider4() {
-    ArgsDefault a = defaultProvider(new PropertyFileDefaultProvider(),
-        "-log", "19", "-groups", "foo", "-level", "13", "f");
+    ArgsDefault a =
+        defaultProvider(
+            new PropertyFileDefaultProvider(), "-log", "19", "-groups", "foo", "-level", "13", "f");
 
     Assert.assertEquals(a.groups, "foo");
     Assert.assertEquals(a.level, 13);
@@ -139,8 +133,11 @@ public class DefaultProviderTest {
     final var f = Files.createTempFile("JCommander", null);
     f.toFile().deleteOnExit();
     Files.write(f, Set.of("GROUPS the file group", "L_V_L 123", "LOG 456"));
-    final var a = defaultProvider(new PropertyFileDefaultProvider(f,
-        optionName -> optionName.replaceFirst("^-+", "").replace("e", "_").toUpperCase()));
+    final var a =
+        defaultProvider(
+            new PropertyFileDefaultProvider(
+                f,
+                optionName -> optionName.replaceFirst("^-+", "").replace("e", "_").toUpperCase()));
 
     Assert.assertEquals(a.groups, "the file group");
     Assert.assertEquals(a.level, 123);
@@ -154,11 +151,12 @@ public class DefaultProviderTest {
       public Integer log;
     }
 
-    IDefaultProvider defaultProvider = new IDefaultProvider() {
-      public String getDefaultValueFor(String optionName) {
-        return "-log".equals(optionName) ? "1" : "";
-      }
-    };
+    IDefaultProvider defaultProvider =
+        new IDefaultProvider() {
+          public String getDefaultValueFor(String optionName) {
+            return "-log".equals(optionName) ? "1" : "";
+          }
+        };
 
     ArgsRequired a = new ArgsRequired();
     JCommander jc = new JCommander(a);

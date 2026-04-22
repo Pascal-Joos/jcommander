@@ -10,9 +10,10 @@ import java.lang.annotation.Target;
  *
  * @author Tim Gallagher
  */
-@Target({ ElementType.FIELD,})
+@Target({
+  ElementType.FIELD,
+})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MyDelegate {
   public boolean delegated() default true;
-  
 }

@@ -12,15 +12,13 @@ import java.util.List;
 public class DefaultParameterizedParser implements IParameterizedParser {
 
   /**
-  * Wraps the default parser. 
-  *
-  * @param annotatedObj an instance of the object with Parameter related annotations.
-  *
-  * @author Tim Gallagher
-  */
+   * Wraps the default parser.
+   *
+   * @param annotatedObj an instance of the object with Parameter related annotations.
+   * @author Tim Gallagher
+   */
   @Override
   public List<Parameterized> parseArg(Object annotatedObj) {
     return Parameterized.parseArg(annotatedObj);
   }
-  
 }

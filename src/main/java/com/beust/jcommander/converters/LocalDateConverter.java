@@ -4,9 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
-/**
- * Converter to {@link LocalDate}.
- */
+/** Converter to {@link LocalDate}. */
 public class LocalDateConverter extends JavaTimeConverter<LocalDate> {
 
   public LocalDateConverter(String optionName) {

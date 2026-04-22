@@ -1,13 +1,12 @@
 package com.beust.jcommander.converters;
 
-import com.beust.jcommander.ParameterException;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import static org.testng.Assert.assertEquals;
 
+import com.beust.jcommander.ParameterException;
 import java.time.LocalDate;
 import java.time.Month;
-
-import static org.testng.Assert.assertEquals;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 public class LocalDateConverterTest {
 
@@ -22,10 +21,7 @@ public class LocalDateConverterTest {
 
   @DataProvider(name = "supported")
   public static Object[][] supported() {
-    return new Object[][]{
-            {"2023-05-11"},
-            {"11-05-2023"}
-    };
+    return new Object[][] {{"2023-05-11"}, {"11-05-2023"}};
   }
 
   @Test(dataProvider = "unsupported", expectedExceptions = ParameterException.class)
@@ -35,9 +31,6 @@ public class LocalDateConverterTest {
 
   @DataProvider(name = "unsupported")
   public static Object[][] unsupported() {
-    return new Object[][]{
-            {"2023:05:11"},
-            {"asd"}
-    };
+    return new Object[][] {{"2023:05:11"}, {"asd"}};
   }
 }
