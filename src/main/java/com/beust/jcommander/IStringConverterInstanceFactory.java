@@ -1,4 +1,5 @@
 package com.beust.jcommander;
+import javax.annotation.Nullable;
 
 /**
  * A factory to create {@link IStringConverter} instances.
@@ -18,6 +19,6 @@ public interface IStringConverterInstanceFactory {
    * @param optionName the name of the option used on the command line
    * @return a converter instance
    */
-  IStringConverter<?> getConverterInstance(
+  @Nullable IStringConverter<?> getConverterInstance(
       Parameter parameter, Class<?> forType, String optionName);
 }

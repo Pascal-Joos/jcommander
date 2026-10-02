@@ -20,6 +20,7 @@ import com.beust.jcommander.IDefaultProvider;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.Nullable;
 
 /**
  * A default provider that reads its default values from an environment variable.
@@ -81,7 +82,7 @@ public final class EnvironmentVariableDefaultProvider implements IDefaultProvide
     this.optionPrefixesPattern = requireNonNull(optionPrefixes);
   }
 
-  @Override
+  @Nullable @Override
   public final String getDefaultValueFor(final String optionName) {
     if (this.environmentVariableValue == null) return null;
     final Matcher matcher =

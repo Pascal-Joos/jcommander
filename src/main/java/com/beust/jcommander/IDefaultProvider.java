@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 package com.beust.jcommander;
+import javax.annotation.Nullable;
 
 /**
  * Allows the specification of default values.
@@ -26,7 +27,7 @@ public interface IDefaultProvider {
    *     the @Parameter option (e.g. "-file").
    * @return the default value for this option.
    */
-  String getDefaultValueFor(String optionName);
+  @Nullable String getDefaultValueFor(String optionName);
 
   /**
    * Returns a default provider which attempts to query a default value from a sequence of default
@@ -38,7 +39,7 @@ public interface IDefaultProvider {
    */
   static IDefaultProvider sequenceOf(final IDefaultProvider... defaultProviders) {
     return new IDefaultProvider() {
-      @Override
+      @Nullable @Override
       public String getDefaultValueFor(final String optionName) {
         for (final var defaultProvider : defaultProviders) {
           final var defaultValue = defaultProvider.getDefaultValueFor(optionName);

@@ -1,4 +1,5 @@
 package com.beust.jcommander;
+import javax.annotation.Nullable;
 
 public interface IValueValidator<T> {
   /**
@@ -8,5 +9,5 @@ public interface IValueValidator<T> {
    * @param value The value of the parameter that we need to validate
    * @throws ParameterException Thrown if the value of the parameter is invalid.
    */
-  void validate(String name, T value) throws ParameterException;
+  void validate(String name, @Nullable T value) throws ParameterException;
 }

@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 package com.beust.jcommander;
+import javax.annotation.Nullable;
 
 /**
  * A factory for IStringConverter. This interface lets you specify your converters in one place
@@ -22,5 +23,5 @@ package com.beust.jcommander;
  * @see IStringConverterInstanceFactory
  */
 public interface IStringConverterFactory {
-  Class<? extends IStringConverter<?>> getConverter(Class<?> forType);
+  @Nullable Class<? extends IStringConverter<?>> getConverter(Class<?> forType);
 }

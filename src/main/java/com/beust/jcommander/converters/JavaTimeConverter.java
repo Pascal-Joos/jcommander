@@ -6,6 +6,7 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
 import java.util.Objects;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 /**
  * Base class for all {@link java.time} converters.
@@ -52,7 +53,7 @@ public abstract class JavaTimeConverter<T extends TemporalAccessor> extends Base
    */
   protected abstract T parse(String value, DateTimeFormatter formatter);
 
-  private T tryConvert(String value, DateTimeFormatter formatter) {
+  @Nullable private T tryConvert(String value, DateTimeFormatter formatter) {
     try {
       return parse(value, formatter);
     } catch (DateTimeParseException exc) {

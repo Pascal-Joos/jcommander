@@ -17,6 +17,7 @@ package com.beust.jcommander;
 import com.beust.jcommander.internal.Lists;
 import java.util.*;
 import java.util.ResourceBundle;
+import javax.annotation.Nullable;
 
 /** The default usage formatter. */
 public class DefaultUsageFormatter implements IUsageFormatter {
@@ -307,7 +308,7 @@ public class DefaultUsageFormatter implements IUsageFormatter {
    * @param commandName the name of the command to get the description for
    * @return the description of the command.
    */
-  public String getCommandDescription(String commandName) {
+  @Nullable public String getCommandDescription(String commandName) {
     JCommander jc = commander.findCommandByAlias(commandName);
 
     if (jc == null) {

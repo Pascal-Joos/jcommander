@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 package com.beust.jcommander;
+import javax.annotation.Nullable;
 
 /**
  * Thrown when a command was expected.
@@ -23,18 +24,18 @@ package com.beust.jcommander;
 public class MissingCommandException extends ParameterException {
 
   /** the command passed by the user. */
-  private final String unknownCommand;
+  @Nullable private final String unknownCommand;
 
   public MissingCommandException(String message) {
     this(message, null);
   }
 
-  public MissingCommandException(String message, String command) {
+  public MissingCommandException(String message, @Nullable String command) {
     super(message);
     this.unknownCommand = command;
   }
 
-  public String getUnknownCommand() {
+  @Nullable public String getUnknownCommand() {
     return unknownCommand;
   }
 }

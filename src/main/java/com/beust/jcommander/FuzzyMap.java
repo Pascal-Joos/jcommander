@@ -2,6 +2,7 @@ package com.beust.jcommander;
 
 import com.beust.jcommander.internal.Maps;
 import java.util.Map;
+import javax.annotation.Nullable;
 
 /** Helper class to perform fuzzy key look ups: looking up case insensitive or abbreviated keys. */
 public class FuzzyMap {
@@ -9,7 +10,7 @@ public class FuzzyMap {
     String getName();
   }
 
-  public static <V> V findInMap(
+  @Nullable public static <V> V findInMap(
       Map<? extends IKey, V> map, IKey name, boolean caseSensitive, boolean allowAbbreviations) {
     if (allowAbbreviations) {
       return findAbbreviatedValue(map, name, caseSensitive);
@@ -27,7 +28,7 @@ public class FuzzyMap {
     return null;
   }
 
-  private static <V> V findAbbreviatedValue(
+  @Nullable private static <V> V findAbbreviatedValue(
       Map<? extends IKey, V> map, IKey name, boolean caseSensitive) {
     String string = name.getName();
     Map<String, V> results = Maps.newHashMap();

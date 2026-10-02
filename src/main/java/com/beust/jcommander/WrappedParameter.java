@@ -3,10 +3,11 @@ package com.beust.jcommander;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import javax.annotation.Nullable;
 
 /** Encapsulates the operations common to @Parameter and @DynamicParameter */
 public class WrappedParameter {
-  private Parameter parameter;
+  @Nullable private Parameter parameter;
   private DynamicParameter dynamicParameter;
 
   public WrappedParameter(Parameter p) {
@@ -17,7 +18,7 @@ public class WrappedParameter {
     dynamicParameter = p;
   }
 
-  public Parameter getParameter() {
+  @Nullable public Parameter getParameter() {
     return parameter;
   }
 
@@ -81,7 +82,7 @@ public class WrappedParameter {
     }
   }
 
-  public void addValue(Parameterized parameterized, Object object, Object value, Field field)
+  public void addValue(Parameterized parameterized, Object object, Object value, @Nullable Field field)
       throws IllegalAccessException {
     if (parameter != null) {
       if (field != null) {
