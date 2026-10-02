@@ -1,31 +1,26 @@
 /**
- * Copyright (C) 2010 the original author or authors.
- * See the notice.md file distributed with this work for additional
- * information regarding copyright ownership.
+ * Copyright (C) 2010 the original author or authors. See the notice.md file distributed with this
+ * work for additional information regarding copyright ownership.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * <p>http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
+ * <p>Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.beust.jcommander.command;
 
 import com.beust.jcommander.ArgsValidate2;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
 import java.io.File;
 import java.util.Arrays;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 public class CommandTest {
   @Test
@@ -83,27 +78,28 @@ public class CommandTest {
     Assert.assertEquals(commit.files, Arrays.asList("A.java", "B.java"));
   }
 
-    @Test
-    public void hiddenCommandTest() {
-        CommandMain cm = new CommandMain();
-        JCommander jc = new JCommander(cm);
-        CommandAdd add = new CommandAdd();
-        jc.addCommand("add", add);
-        CommandHidden hidden = new CommandHidden();
-        jc.addCommand("hidden", hidden);
-        jc.parse("hidden", "-i", "A.java");
+  @Test
+  public void hiddenCommandTest() {
+    CommandMain cm = new CommandMain();
+    JCommander jc = new JCommander(cm);
+    CommandAdd add = new CommandAdd();
+    jc.addCommand("add", add);
+    CommandHidden hidden = new CommandHidden();
+    jc.addCommand("hidden", hidden);
+    jc.parse("hidden", "-i", "A.java");
 
-        Assert.assertEquals(jc.getParsedCommand(), "hidden");
-        Assert.assertEquals(hidden.interactive.booleanValue(), true);
-        Assert.assertEquals(hidden.patterns, Arrays.asList("A.java"));
+    Assert.assertEquals(jc.getParsedCommand(), "hidden");
+    Assert.assertEquals(hidden.interactive.booleanValue(), true);
+    Assert.assertEquals(hidden.patterns, Arrays.asList("A.java"));
 
-        jc.setProgramName("TestCommander");
-        StringBuilder out = new StringBuilder();
-        jc.getUsageFormatter().usage(out);
+    jc.setProgramName("TestCommander");
+    StringBuilder out = new StringBuilder();
+    jc.getUsageFormatter().usage(out);
 
-        Assert.assertTrue(out.toString().contains("add      Add file contents to the index"));
-        Assert.assertFalse(out.toString().contains("hidden      Hidden command to add file contents to the index"));
-    }
+    Assert.assertTrue(out.toString().contains("add      Add file contents to the index"));
+    Assert.assertFalse(
+        out.toString().contains("hidden      Hidden command to add file contents to the index"));
+  }
 
   @Test
   public void noParametersAnnotationOnCommandTest() {
@@ -151,7 +147,6 @@ public class CommandTest {
     jc.addCommand("sub", sub);
     jc.parseWithoutValidation("sub", "-template", "foo");
     Assert.assertEquals(sub.template, new File("foo"));
-
   }
 
   public static void main(String[] args) {

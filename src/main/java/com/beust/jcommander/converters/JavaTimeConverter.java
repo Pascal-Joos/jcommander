@@ -1,7 +1,6 @@
 package com.beust.jcommander.converters;
 
 import com.beust.jcommander.ParameterException;
-
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
@@ -21,7 +20,7 @@ public abstract class JavaTimeConverter<T extends TemporalAccessor> extends Base
    * Inheritor constructors should have only 1 parameter - optionName.
    *
    * @param optionName name of the option
-   * @param toClass    type to parse into
+   * @param toClass type to parse into
    */
   protected JavaTimeConverter(String optionName, Class<T> toClass) {
     super(optionName);
@@ -31,10 +30,10 @@ public abstract class JavaTimeConverter<T extends TemporalAccessor> extends Base
   @Override
   public final T convert(String value) {
     return supportedFormats().stream()
-            .map(formatter -> tryConvert(value, formatter))
-            .filter(Objects::nonNull)
-            .findFirst()
-            .orElseThrow(() -> new ParameterException(errorMessage(value)));
+        .map(formatter -> tryConvert(value, formatter))
+        .filter(Objects::nonNull)
+        .findFirst()
+        .orElseThrow(() -> new ParameterException(errorMessage(value)));
   }
 
   /**

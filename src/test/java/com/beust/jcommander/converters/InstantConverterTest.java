@@ -1,12 +1,11 @@
 package com.beust.jcommander.converters;
 
+import static org.testng.Assert.assertEquals;
+
 import com.beust.jcommander.ParameterException;
+import java.time.Instant;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import java.time.Instant;
-
-import static org.testng.Assert.assertEquals;
 
 public class InstantConverterTest {
 
@@ -21,10 +20,10 @@ public class InstantConverterTest {
 
   @DataProvider(name = "data")
   public static Object[][] data() {
-    return new Object[][]{
-            {"111", "1970-01-01T00:00:00.111Z"},
-            {"1234567890", "1970-01-15T06:56:07.890Z"},
-            {"-11", "1969-12-31T23:59:59.989Z"}
+    return new Object[][] {
+      {"111", "1970-01-01T00:00:00.111Z"},
+      {"1234567890", "1970-01-15T06:56:07.890Z"},
+      {"-11", "1969-12-31T23:59:59.989Z"}
     };
   }
 

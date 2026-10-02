@@ -1,31 +1,26 @@
 /**
- * Copyright (C) 2010 the original author or authors.
- * See the notice.md file distributed with this work for additional
- * information regarding copyright ownership.
+ * Copyright (C) 2010 the original author or authors. See the notice.md file distributed with this
+ * work for additional information regarding copyright ownership.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * <p>http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
+ * <p>Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.beust.jcommander.command;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 /**
  * Tests command alias functionality
@@ -97,8 +92,8 @@ public class CommandAliasTest {
       jc.addCommand("commit", commit, "ci", "xx");
       Assert.fail("Should not be able to register clashing alias 'xx'");
     } catch (ParameterException pe) {
-      //Make sure the message mentions that "xx" aliases is already
-      //defined for "add" command
+      // Make sure the message mentions that "xx" aliases is already
+      // defined for "add" command
       Assert.assertTrue(pe.getMessage().contains("xx"));
       Assert.assertTrue(pe.getMessage().contains("add"));
     }
@@ -144,11 +139,9 @@ public class CommandAliasTest {
     patternMatchesTimes("commit\\(ci,cmt\\)", out.toString(), 2);
   }
 
-  /**
-   * Visually test the formatting for "prettiness"
-   */
+  /** Visually test the formatting for "prettiness" */
   @Test(enabled = false, description = "TODO: test the output instead of displaying it")
-  public void formattingLooksNice(){
+  public void formattingLooksNice() {
     CommandMain cm = new CommandMain();
     JCommander jc = new JCommander(cm);
     CommandAdd add = new CommandAdd();

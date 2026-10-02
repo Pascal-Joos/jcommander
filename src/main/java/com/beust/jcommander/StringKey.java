@@ -13,5 +13,4 @@ public record StringKey(String name) implements IKey {
   public String toString() {
     return name;
   }
-
 }

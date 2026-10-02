@@ -5,11 +5,9 @@ import com.beust.jcommander.HostPortConverter;
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.IParameterSplitter;
-
-import org.testng.collections.Lists;
-
 import java.util.Arrays;
 import java.util.List;
+import org.testng.collections.Lists;
 
 public class ArgsList {
   @Parameter(names = "-groups", description = "Comma-separated list of group names to be run")
@@ -43,7 +41,5 @@ public class ArgsList {
     public List<String> split(String value) {
       return Arrays.asList(value.split(";"));
     }
-    
   }
-
 }

@@ -1,10 +1,9 @@
 package com.beust.jcommander;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 /**
  * @author rodionmoiseev
@@ -19,10 +18,11 @@ public class ParametersDelegateTest {
     class MainParams {
       @Parameter(names = "-a")
       public boolean isA;
+
       @Parameter(names = {"-b", "--long-b"})
       public String bValue = "";
-      @ParametersDelegate
-      public EmptyDelegate delegate = new EmptyDelegate();
+
+      @ParametersDelegate public EmptyDelegate delegate = new EmptyDelegate();
     }
 
     MainParams p = new MainParams();
@@ -38,16 +38,18 @@ public class ParametersDelegateTest {
     class ComplexDelegate {
       @Parameter(names = "-c")
       public boolean isC;
+
       @Parameter(names = {"-d", "--long-d"})
       public Integer d;
     }
     class MainParams {
       @Parameter(names = "-a")
       public boolean isA;
+
       @Parameter(names = {"-b", "--long-b"})
       public String bValue = "";
-      @ParametersDelegate
-      public ComplexDelegate delegate = new ComplexDelegate();
+
+      @ParametersDelegate public ComplexDelegate delegate = new ComplexDelegate();
     }
 
     MainParams p = new MainParams();
@@ -67,38 +69,42 @@ public class ParametersDelegateTest {
     class LeafDelegate {
       @Parameter(names = "--list")
       public List<String> list = List.of("value1", "value2");
+
       @Parameter(names = "--bool")
       public boolean bool;
     }
     class NestedDelegate1 {
-      @ParametersDelegate
-      public LeafDelegate leafDelegate = new LeafDelegate();
+      @ParametersDelegate public LeafDelegate leafDelegate = new LeafDelegate();
+
       @Parameter(names = {"-d", "--long-d"})
       public Integer d;
     }
     class NestedDelegate2 {
       @Parameter(names = "-c")
       public boolean isC;
-      @ParametersDelegate
-      public NestedDelegate1 nestedDelegate1 = new NestedDelegate1();
-      @ParametersDelegate
-      public LeafAbstractDelegate anonymousDelegate = new LeafAbstractDelegate() {
-        @Parameter(names = "--anon-float")
-        public float anon = 999f;
 
-        @Override
-        float getFloat() {
-          return anon;
-        }
-      };
+      @ParametersDelegate public NestedDelegate1 nestedDelegate1 = new NestedDelegate1();
+
+      @ParametersDelegate
+      public LeafAbstractDelegate anonymousDelegate =
+          new LeafAbstractDelegate() {
+            @Parameter(names = "--anon-float")
+            public float anon = 999f;
+
+            @Override
+            float getFloat() {
+              return anon;
+            }
+          };
     }
     class MainParams {
       @Parameter(names = "-a")
       public boolean isA;
+
       @Parameter(names = {"-b", "--long-b"})
       public String bValue = "";
-      @ParametersDelegate
-      public NestedDelegate2 nestedDelegate2 = new NestedDelegate2();
+
+      @ParametersDelegate public NestedDelegate2 nestedDelegate2 = new NestedDelegate2();
     }
 
     MainParams p = new MainParams();
@@ -120,8 +126,7 @@ public class ParametersDelegateTest {
       public String a = "b";
     }
     class Command {
-      @ParametersDelegate
-      public Delegate delegate = new Delegate();
+      @ParametersDelegate public Delegate delegate = new Delegate();
     }
 
     Command c = new Command();
@@ -136,12 +141,10 @@ public class ParametersDelegateTest {
   @Test
   public void mainParametersTest() {
     class Delegate {
-      @Parameter
-      public List<String> mainParams = new ArrayList<>();
+      @Parameter public List<String> mainParams = new ArrayList<>();
     }
     class Command {
-      @ParametersDelegate
-      public Delegate delegate = new Delegate();
+      @ParametersDelegate public Delegate delegate = new Delegate();
     }
 
     Command c = new Command();
@@ -153,14 +156,13 @@ public class ParametersDelegateTest {
     Assert.assertEquals(c.delegate.mainParams, List.of("main", "params"));
   }
 
-  @Test(expectedExceptions = ParameterException.class,
-          expectedExceptionsMessageRegExp = ".*delegate.*null.*")
+  @Test(
+      expectedExceptions = ParameterException.class,
+      expectedExceptionsMessageRegExp = ".*delegate.*null.*")
   public void nullDelegatesAreProhibited() {
-    class ComplexDelegate {
-    }
+    class ComplexDelegate {}
     class MainParams {
-      @ParametersDelegate
-      public ComplexDelegate delegate;
+      @ParametersDelegate public ComplexDelegate delegate;
     }
 
     MainParams p = new MainParams();
@@ -168,18 +170,15 @@ public class ParametersDelegateTest {
     cmd.parse();
   }
 
-  @Test(expectedExceptions = ParameterException.class,
-          expectedExceptionsMessageRegExp = ".*-a.*")
+  @Test(expectedExceptions = ParameterException.class, expectedExceptionsMessageRegExp = ".*-a.*")
   public void duplicateDelegateThrowDuplicateOptionException() {
     class Delegate {
       @Parameter(names = "-a")
       public String a;
     }
     class MainParams {
-      @ParametersDelegate
-      public Delegate d1 = new Delegate();
-      @ParametersDelegate
-      public Delegate d2 = new Delegate();
+      @ParametersDelegate public Delegate d1 = new Delegate();
+      @ParametersDelegate public Delegate d2 = new Delegate();
     }
 
     MainParams p = new MainParams();
@@ -187,21 +186,19 @@ public class ParametersDelegateTest {
     cmd.parse("-a value".split(" "));
   }
 
-  @Test(expectedExceptions = ParameterException.class, expectedExceptionsMessageRegExp = "Only one.*is allowed.*")
+  @Test(
+      expectedExceptions = ParameterException.class,
+      expectedExceptionsMessageRegExp = "Only one.*is allowed.*")
   public void duplicateMainParametersAreNotAllowed() {
     class Delegate1 {
-      @Parameter
-      public List<String> mainParams1 = new ArrayList<>();
+      @Parameter public List<String> mainParams1 = new ArrayList<>();
     }
     class Delegate2 {
-      @Parameter
-      public List<String> mainParams2 = new ArrayList<>();
+      @Parameter public List<String> mainParams2 = new ArrayList<>();
     }
     class Command {
-      @ParametersDelegate
-      public Delegate1 delegate1 = new Delegate1();
-      @ParametersDelegate
-      public Delegate2 delegate2 = new Delegate2();
+      @ParametersDelegate public Delegate1 delegate1 = new Delegate1();
+      @ParametersDelegate public Delegate2 delegate2 = new Delegate2();
     }
 
     Command c = new Command();
@@ -215,12 +212,10 @@ public class ParametersDelegateTest {
   @Test
   public void testFinalFieldAsParameterDelegate() {
     class Delegate1 {
-      @Parameter
-      public List<String> mainParams1 = new ArrayList<String>();
+      @Parameter public List<String> mainParams1 = new ArrayList<String>();
     }
     class Command {
-      @ParametersDelegate
-      public final Delegate1 delegate1 = new Delegate1();
+      @ParametersDelegate public final Delegate1 delegate1 = new Delegate1();
     }
     Command c = new Command();
 

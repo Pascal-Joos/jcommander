@@ -6,20 +6,20 @@ import java.util.stream.Collectors;
 
 public class Strings {
 
-    public static boolean isStringEmpty(String s) {
-        return s == null || s.isEmpty();
-    }
+  public static boolean isStringEmpty(String s) {
+    return s == null || s.isEmpty();
+  }
 
-    public static boolean startsWith(String s, String with, boolean isCaseSensitive) {
-        return isCaseSensitive ? s.startsWith(with) : s.toLowerCase().startsWith(with.toLowerCase());
-    }
+  public static boolean startsWith(String s, String with, boolean isCaseSensitive) {
+    return isCaseSensitive ? s.startsWith(with) : s.toLowerCase().startsWith(with.toLowerCase());
+  }
 
-    @Deprecated(forRemoval = true, since = "3.0.0")
-    public static String join(String delimiter, List<String> args) {
-        return String.join(delimiter, args);
-    }
+  @Deprecated(forRemoval = true, since = "3.0.0")
+  public static String join(String delimiter, List<String> args) {
+    return String.join(delimiter, args);
+  }
 
-    public static String join(String delimiter, Object[] args) {
-        return Arrays.stream(args).map(String::valueOf).collect(Collectors.joining(delimiter));
-    }
+  public static String join(String delimiter, Object[] args) {
+    return Arrays.stream(args).map(String::valueOf).collect(Collectors.joining(delimiter));
+  }
 }

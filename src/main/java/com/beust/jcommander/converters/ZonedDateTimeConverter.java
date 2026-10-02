@@ -4,9 +4,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
-/**
- * Converter for {@link ZonedDateTime}.
- */
+/** Converter for {@link ZonedDateTime}. */
 public class ZonedDateTimeConverter extends JavaTimeConverter<ZonedDateTime> {
 
   public ZonedDateTimeConverter(String optionName) {

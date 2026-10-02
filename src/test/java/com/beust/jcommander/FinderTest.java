@@ -2,7 +2,6 @@ package com.beust.jcommander;
 
 import com.beust.jcommander.JCommanderTest.BaseArgs;
 import com.beust.jcommander.JCommanderTest.ConfigureArgs;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -10,8 +9,8 @@ import org.testng.annotations.Test;
 public class FinderTest {
   public void caseInsensitiveOption() {
     class Arg {
-  
-      @Parameter(names = { "-p", "--param" })
+
+      @Parameter(names = {"-p", "--param"})
       private String param;
     }
     Arg a = new Arg();
@@ -32,7 +31,6 @@ public class FinderTest {
     Assert.assertEquals(command, "--configure");
   }
 
-
   public void caseInsensitiveArguments() throws Exception {
     @Parameters(separators = "=")
     class TestJobRunnerArgs {
@@ -51,7 +49,7 @@ public class FinderTest {
 
   public void abbreviatedOptions() {
     class Arg {
-      @Parameter(names = { "-p", "--param" })
+      @Parameter(names = {"-p", "--param"})
       private String param;
     }
     Arg a = new Arg();
@@ -63,7 +61,7 @@ public class FinderTest {
 
   public void abbreviatedOptionsCaseInsensitive() {
     class Arg {
-      @Parameter(names = { "-p", "--param" })
+      @Parameter(names = {"-p", "--param"})
       private String param;
     }
     Arg a = new Arg();
@@ -77,9 +75,10 @@ public class FinderTest {
   @Test(expectedExceptions = ParameterException.class)
   public void ambiguousAbbreviatedOptions() {
     class Arg {
-      @Parameter(names = { "--param" })
+      @Parameter(names = {"--param"})
       private String param;
-      @Parameter(names = { "--parb" })
+
+      @Parameter(names = {"--parb"})
       private String parb;
     }
     Arg a = new Arg();
@@ -92,9 +91,10 @@ public class FinderTest {
   @Test(expectedExceptions = ParameterException.class)
   public void ambiguousAbbreviatedOptionsCaseInsensitive() {
     class Arg {
-      @Parameter(names = { "--param" })
+      @Parameter(names = {"--param"})
       private String param;
-      @Parameter(names = { "--parb" })
+
+      @Parameter(names = {"--parb"})
       private String parb;
     }
     Arg a = new Arg();
@@ -109,5 +109,4 @@ public class FinderTest {
   public static void main(String[] args) throws Exception {
     new FinderTest().ambiguousAbbreviatedOptionsCaseInsensitive();
   }
-
 }

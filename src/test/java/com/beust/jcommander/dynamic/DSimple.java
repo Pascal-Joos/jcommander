@@ -1,10 +1,8 @@
 package com.beust.jcommander.dynamic;
 
 import com.beust.jcommander.DynamicParameter;
-
-import org.testng.collections.Maps;
-
 import java.util.Map;
+import org.testng.collections.Maps;
 
 public class DSimple {
 

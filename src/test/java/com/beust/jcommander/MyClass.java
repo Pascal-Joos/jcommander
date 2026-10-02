@@ -2,11 +2,12 @@ package com.beust.jcommander;
 
 import org.testng.Assert;
 
-
 @Parameters(separators = "=")
 public class MyClass {
 
-  @Parameter(names = { "-p", "--param" }, validateWith = MyValidator.class)
+  @Parameter(
+      names = {"-p", "--param"},
+      validateWith = MyValidator.class)
   private String param;
 
   public static void main(String[] args) {
@@ -20,5 +21,4 @@ public class MyClass {
       Assert.assertEquals(value, "\"");
     }
   }
-
 }

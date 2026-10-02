@@ -1,12 +1,11 @@
 package com.beust.jcommander.converters;
 
+import static org.testng.Assert.assertEquals;
+
 import com.beust.jcommander.ParameterException;
+import java.time.LocalTime;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import java.time.LocalTime;
-
-import static org.testng.Assert.assertEquals;
 
 public class LocalTimeConverterTest {
 
@@ -21,10 +20,7 @@ public class LocalTimeConverterTest {
 
   @DataProvider(name = "supported")
   public static Object[][] supported() {
-    return new Object[][]{
-            {"10:11:00.000"},
-            {"10:11"}
-    };
+    return new Object[][] {{"10:11:00.000"}, {"10:11"}};
   }
 
   @Test(dataProvider = "unsupported", expectedExceptions = ParameterException.class)
@@ -34,9 +30,6 @@ public class LocalTimeConverterTest {
 
   @DataProvider(name = "unsupported")
   public static Object[][] unsupported() {
-    return new Object[][]{
-            {"10-11"},
-            {"qwe"}
-    };
+    return new Object[][] {{"10-11"}, {"qwe"}};
   }
 }

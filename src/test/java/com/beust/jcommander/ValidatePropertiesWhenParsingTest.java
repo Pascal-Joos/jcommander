@@ -4,8 +4,7 @@ import org.testng.annotations.Test;
 
 public class ValidatePropertiesWhenParsingTest {
   @Test
-  public void f()
-      throws Exception {
+  public void f() throws Exception {
 
     JCommander cmd = new JCommander();
 

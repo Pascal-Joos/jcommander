@@ -1,28 +1,23 @@
 /**
- * Copyright (C) 2010 the original author or authors.
- * See the notice.md file distributed with this work for additional
- * information regarding copyright ownership.
+ * Copyright (C) 2010 the original author or authors. See the notice.md file distributed with this
+ * work for additional information regarding copyright ownership.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * <p>http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
+ * <p>Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.beust.jcommander;
-
-import com.beust.jcommander.validators.NoValidator;
-import com.beust.jcommander.validators.NoValueValidator;
 
 import static com.beust.jcommander.Strings.isStringEmpty;
 
+import com.beust.jcommander.validators.NoValidator;
+import com.beust.jcommander.validators.NoValueValidator;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -37,22 +32,31 @@ public class ParameterDescription {
 
   /** The field/method */
   private Parameterized parameterized;
+
   /** Keep track of whether a value was added to flag an error */
   private boolean assigned = false;
+
   private ResourceBundle bundle;
   private String description;
   private JCommander jCommander;
   private Object defaultObject;
+
   /** Longest of the names(), used to present usage() alphabetically */
   private String longestName = "";
 
-  public ParameterDescription(Object object, DynamicParameter annotation,
+  public ParameterDescription(
+      Object object,
+      DynamicParameter annotation,
       Parameterized parameterized,
-      ResourceBundle bundle, JCommander jc) {
-    if (! Map.class.isAssignableFrom(parameterized.getType())) {
-      throw new ParameterException("@DynamicParameter " + parameterized.getName()
-          + " should be of type "
-          + "Map but is " + parameterized.getType().getName());
+      ResourceBundle bundle,
+      JCommander jc) {
+    if (!Map.class.isAssignableFrom(parameterized.getType())) {
+      throw new ParameterException(
+          "@DynamicParameter "
+              + parameterized.getName()
+              + " should be of type "
+              + "Map but is "
+              + parameterized.getType().getName());
     }
 
     dynamicParameterAnnotation = annotation;
@@ -60,8 +64,12 @@ public class ParameterDescription {
     init(object, parameterized, bundle, jc);
   }
 
-  public ParameterDescription(Object object, Parameter annotation, Parameterized parameterized,
-      ResourceBundle bundle, JCommander jc) {
+  public ParameterDescription(
+      Object object,
+      Parameter annotation,
+      Parameterized parameterized,
+      ResourceBundle bundle,
+      JCommander jc) {
     parameterAnnotation = annotation;
     wrappedParameter = new WrappedParameter(parameterAnnotation);
     init(object, parameterized, bundle, jc);
@@ -69,6 +77,7 @@ public class ParameterDescription {
 
   /**
    * Find the resource bundle in the annotations.
+   *
    * @return
    */
   @SuppressWarnings("deprecation")
@@ -76,13 +85,16 @@ public class ParameterDescription {
     ResourceBundle result = null;
 
     Parameters p = o.getClass().getAnnotation(Parameters.class);
-    if (p != null && ! isStringEmpty(p.resourceBundle())) {
-      result = ResourceBundle.getBundle(p.resourceBundle(), Locale.getDefault(), o.getClass().getClassLoader());
+    if (p != null && !isStringEmpty(p.resourceBundle())) {
+      result =
+          ResourceBundle.getBundle(
+              p.resourceBundle(), Locale.getDefault(), o.getClass().getClassLoader());
     } else {
-      com.beust.jcommander.ResourceBundle a = o.getClass().getAnnotation(
-          com.beust.jcommander.ResourceBundle.class);
-      if (a != null && ! isStringEmpty(a.value())) {
-        result = ResourceBundle.getBundle(a.value(), Locale.getDefault(), o.getClass().getClassLoader());
+      com.beust.jcommander.ResourceBundle a =
+          o.getClass().getAnnotation(com.beust.jcommander.ResourceBundle.class);
+      if (a != null && !isStringEmpty(a.value())) {
+        result =
+            ResourceBundle.getBundle(a.value(), Locale.getDefault(), o.getClass().getClassLoader());
       }
     }
 
@@ -91,7 +103,7 @@ public class ParameterDescription {
 
   private void initDescription(String description, String descriptionKey, String[] names) {
     this.description = description;
-    if (! isStringEmpty(descriptionKey)) {
+    if (!isStringEmpty(descriptionKey)) {
       if (bundle != null) {
         this.description = bundle.getString(descriptionKey);
       }
@@ -103,19 +115,21 @@ public class ParameterDescription {
   }
 
   /**
-   * Initializes the state of this parameter description. This will set an appropriate bundle if it is null<.
-   * If its the description in is empty and it refers to an enum type, then the description will be set to its possible
-   * values. It will also attempt to validate the default value of the parameter.
+   * Initializes the state of this parameter description. This will set an appropriate bundle if it
+   * is null<. If its the description in is empty and it refers to an enum type, then the
+   * description will be set to its possible values. It will also attempt to validate the default
+   * value of the parameter.
    *
    * @param object the object defining the command-line arguments
-   * @param parameterized the wrapper for the field or method annotated with \@Parameter this represents
+   * @param parameterized the wrapper for the field or method annotated with \@Parameter this
+   *     represents
    * @param bundle the locale
    * @param jCommander the parent JCommander instance
    * @see #initDescription(String, String, String[])
    */
   @SuppressWarnings("unchecked")
-  private void init(Object object, Parameterized parameterized, ResourceBundle bundle,
-      JCommander jCommander) {
+  private void init(
+      Object object, Parameterized parameterized, ResourceBundle bundle, JCommander jCommander) {
     this.object = object;
     this.parameterized = parameterized;
     this.bundle = bundle;
@@ -129,13 +143,14 @@ public class ParameterDescription {
       if (Enum.class.isAssignableFrom(parameterized.getType())
           && parameterAnnotation.description().isEmpty()) {
         description = "Options: " + EnumSet.allOf((Class<? extends Enum>) parameterized.getType());
-      }else {
+      } else {
         description = parameterAnnotation.description();
       }
-      initDescription(description, parameterAnnotation.descriptionKey(),
-          parameterAnnotation.names());
+      initDescription(
+          description, parameterAnnotation.descriptionKey(), parameterAnnotation.names());
     } else if (dynamicParameterAnnotation != null) {
-      initDescription(dynamicParameterAnnotation.description(),
+      initDescription(
+          dynamicParameterAnnotation.description(),
           dynamicParameterAnnotation.descriptionKey(),
           dynamicParameterAnnotation.names());
     } else {
@@ -174,7 +189,11 @@ public class ParameterDescription {
    * @return defaultValueDescription, if description is empty string, return default Object.
    */
   public Object getDefaultValueDescription() {
-    return parameterAnnotation == null ? defaultObject : parameterAnnotation.defaultValueDescription().isEmpty() ? defaultObject : parameterAnnotation.defaultValueDescription();
+    return parameterAnnotation == null
+        ? defaultObject
+        : parameterAnnotation.defaultValueDescription().isEmpty()
+            ? defaultObject
+            : parameterAnnotation.defaultValueDescription();
   }
 
   public String getDescription() {
@@ -203,7 +222,8 @@ public class ParameterDescription {
 
   private boolean isMultiOption() {
     Class<?> fieldType = parameterized.getType();
-    return fieldType.equals(List.class) || fieldType.equals(Set.class)
+    return fieldType.equals(List.class)
+        || fieldType.equals(Set.class)
         || parameterized.isDynamicParameter();
   }
 
@@ -218,28 +238,36 @@ public class ParameterDescription {
     return assigned;
   }
 
-
   public void setAssigned(boolean b) {
     assigned = b;
   }
 
   /**
-   * Add the specified value to the field. First, validate the value if a
-   * validator was specified. Then look up any field converter, then any type
-   * converter, and if we can't find any, throw an exception.
+   * Add the specified value to the field. First, validate the value if a validator was specified.
+   * Then look up any field converter, then any type converter, and if we can't find any, throw an
+   * exception.
    */
   public void addValue(String value, boolean isDefault) {
     addValue(null, value, isDefault, true, -1);
   }
 
-  Object addValue(String name, String value, boolean isDefault, boolean validate, int currentIndex) {
-    p("Adding " + (isDefault ? "default " : "") + "value:" + value
-        + " to parameter:" + parameterized.getName());
-    if(name == null) {
+  Object addValue(
+      String name, String value, boolean isDefault, boolean validate, int currentIndex) {
+    p(
+        "Adding "
+            + (isDefault ? "default " : "")
+            + "value:"
+            + value
+            + " to parameter:"
+            + parameterized.getName());
+    if (name == null) {
       name = wrappedParameter.names()[0];
     }
-    if (currentIndex == 00 && assigned && ! isMultiOption() && !jCommander.isParameterOverwritingAllowed()
-            || isNonOverwritableForced()) {
+    if (currentIndex == 00
+            && assigned
+            && !isMultiOption()
+            && !jCommander.isParameterOverwritingAllowed()
+        || isNonOverwritableForced()) {
       throw new ParameterException("Can only specify option " + name + " once.");
     }
 
@@ -249,7 +277,8 @@ public class ParameterDescription {
 
     Class<?> type = parameterized.getType();
 
-    Object convertedValue = jCommander.convertValue(getParameterized(), getParameterized().getType(), name, value);
+    Object convertedValue =
+        jCommander.convertValue(getParameterized(), getParameterized().getType(), name, value);
     if (validate) {
       validateValueParameter(name, convertedValue);
     }
@@ -260,19 +289,20 @@ public class ParameterDescription {
       @SuppressWarnings("unchecked")
       Collection<Object> l = (Collection<Object>) parameterized.get(object);
       if (l == null || fieldIsSetForTheFirstTime(isDefault)) {
-          l = newCollection(type);
-          parameterized.set(object, l);
+        l = newCollection(type);
+        parameterized.set(object, l);
       }
       if (convertedValue instanceof Collection c) {
-          l.addAll(c);
+        l.addAll(c);
       } else {
-          l.add(convertedValue);
+        l.add(convertedValue);
       }
       finalValue = l;
     } else {
-      // If the field type is not a collection, see if it's a type that contains @SubParameters annotations
+      // If the field type is not a collection, see if it's a type that contains @SubParameters
+      // annotations
       List<SubParameterIndex> subParameters = findSubParameters(type);
-      if (! subParameters.isEmpty()) {
+      if (!subParameters.isEmpty()) {
         // @SubParameters found
         finalValue = handleSubParameters(value, currentIndex, type, subParameters);
       } else {
@@ -281,7 +311,7 @@ public class ParameterDescription {
         finalValue = convertedValue;
       }
     }
-    if (! isDefault) assigned = true;
+    if (!isDefault) assigned = true;
 
     this.value = finalValue;
 
@@ -291,14 +321,15 @@ public class ParameterDescription {
   private Object value;
 
   Object getValue() {
-	  return value;
+    return value;
   }
 
-  private Object handleSubParameters(String value, int currentIndex, Class<?> type,
-      List<SubParameterIndex> subParameters) {
-    Object finalValue;// Yes, assign each following argument to the corresponding field of that object
+  private Object handleSubParameters(
+      String value, int currentIndex, Class<?> type, List<SubParameterIndex> subParameters) {
+    Object
+        finalValue; // Yes, assign each following argument to the corresponding field of that object
     SubParameterIndex sai = null;
-    for (SubParameterIndex si: subParameters) {
+    for (SubParameterIndex si : subParameters) {
       if (si.order == currentIndex) {
         sai = si;
         break;
@@ -317,7 +348,8 @@ public class ParameterDescription {
         throw new ParameterException("Couldn't instantiate " + type, e);
       }
     } else {
-      throw new ParameterException("Couldn't find where to assign parameter " + value + " in " + type);
+      throw new ParameterException(
+          "Couldn't find where to assign parameter " + value + " in " + type);
     }
     return finalValue;
   }
@@ -338,7 +370,7 @@ public class ParameterDescription {
 
   private List<SubParameterIndex> findSubParameters(Class<?> type) {
     List<SubParameterIndex> result = new ArrayList<>();
-    for (Field field: type.getDeclaredFields()) {
+    for (Field field : type.getDeclaredFields()) {
       Annotation subParameter = field.getAnnotation(SubParameter.class);
       if (subParameter != null) {
         SubParameter sa = (SubParameter) subParameter;
@@ -351,23 +383,23 @@ public class ParameterDescription {
   private void validateParameter(String name, String value) {
     final Class<? extends IParameterValidator> validators[] = wrappedParameter.validateWith();
     if (validators != null && validators.length > 0) {
-        for(final Class<? extends IParameterValidator> validator: validators) {
-          validateParameter(validator, name, value);
-        }
+      for (final Class<? extends IParameterValidator> validator : validators) {
+        validateParameter(validator, name, value);
+      }
     }
   }
 
   void validateValueParameter(String name, Object value) {
     final Class<? extends IValueValidator> validators[] = wrappedParameter.validateValueWith();
     if (validators != null && validators.length > 0) {
-      for(final Class<? extends IValueValidator> validator: validators) {
+      for (final Class<? extends IValueValidator> validator : validators) {
         validateValueParameter(validator, name, value);
       }
     }
   }
 
-  public void validateValueParameter(Class<? extends IValueValidator> validator,
-      String name, Object value) {
+  public void validateValueParameter(
+      Class<? extends IValueValidator> validator, String name, Object value) {
     try {
       if (validator != NoValueValidator.class) {
         p("Validating value parameter:" + name + " value:" + value + " validator:" + validator);
@@ -378,10 +410,10 @@ public class ParameterDescription {
     }
   }
 
-  public void validateParameter(Class<? extends IParameterValidator> validator,
-      String name, String value) {
+  public void validateParameter(
+      Class<? extends IParameterValidator> validator, String name, String value) {
     try {
-    	
+
       if (validator != NoValidator.class) {
         p("Validating parameter:" + name + " value:" + value + " validator:" + validator);
       }
@@ -392,9 +424,9 @@ public class ParameterDescription {
       }
     } catch (InstantiationException | IllegalAccessException e) {
       throw new ParameterException("Can't instantiate validator:" + e);
-    } catch(ParameterException ex) {
+    } catch (ParameterException ex) {
       throw ex;
-    } catch(Exception ex) {
+    } catch (Exception ex) {
       throw new ParameterException(ex);
     }
   }
@@ -412,8 +444,10 @@ public class ParameterDescription {
     else if (Set.class.isAssignableFrom(type)) return new HashSet();
     else if (List.class.isAssignableFrom(type)) return new ArrayList();
     else {
-      throw new ParameterException("Parameters of Collection type '" + type.getSimpleName()
-                                  + "' are not supported. Please use List or Set instead.");
+      throw new ParameterException(
+          "Parameters of Collection type '"
+              + type.getSimpleName()
+              + "' are not supported. Please use List or Set instead.");
     }
   }
 
@@ -443,7 +477,7 @@ public class ParameterDescription {
   public boolean isHelp() {
     return wrappedParameter.isHelp();
   }
-  
+
   public boolean isNonOverwritableForced() {
     return wrappedParameter.isNonOverwritableForced();
   }

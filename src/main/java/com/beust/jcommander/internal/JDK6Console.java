@@ -1,7 +1,6 @@
 package com.beust.jcommander.internal;
 
 import com.beust.jcommander.ParameterException;
-
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
 
@@ -30,16 +29,14 @@ public class JDK6Console implements Console {
       writer.flush();
       Method method;
       if (echoInput) {
-          method = console.getClass().getDeclaredMethod("readLine");
-          return ((String) method.invoke(console)).toCharArray();
+        method = console.getClass().getDeclaredMethod("readLine");
+        return ((String) method.invoke(console)).toCharArray();
       } else {
-          method = console.getClass().getDeclaredMethod("readPassword");
-          return (char[]) method.invoke(console);
+        method = console.getClass().getDeclaredMethod("readPassword");
+        return (char[]) method.invoke(console);
       }
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       throw new ParameterException(e);
     }
   }
-
 }

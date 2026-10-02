@@ -1,14 +1,13 @@
 package com.beust.jcommander.converters;
 
-import com.beust.jcommander.ParameterException;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import static org.testng.Assert.assertEquals;
 
+import com.beust.jcommander.ParameterException;
 import java.time.LocalTime;
 import java.time.OffsetTime;
 import java.time.ZoneOffset;
-
-import static org.testng.Assert.assertEquals;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 public class OffsetTimeConverterTest {
 
@@ -23,10 +22,7 @@ public class OffsetTimeConverterTest {
 
   @DataProvider(name = "supported")
   public static Object[][] supported() {
-    return new Object[][]{
-            {"10:11:00.000+00:00"},
-            {"10:11+00:00"}
-    };
+    return new Object[][] {{"10:11:00.000+00:00"}, {"10:11+00:00"}};
   }
 
   @Test(dataProvider = "unsupported", expectedExceptions = ParameterException.class)
@@ -36,10 +32,6 @@ public class OffsetTimeConverterTest {
 
   @DataProvider(name = "unsupported")
   public static Object[][] unsupported() {
-    return new Object[][]{
-            {"10-11"},
-            {"10:11"},
-            {"qwe"}
-    };
+    return new Object[][] {{"10-11"}, {"10:11"}, {"qwe"}};
   }
 }
